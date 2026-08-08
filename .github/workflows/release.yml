@@ -40,3 +40,35 @@ jobs:
           createGithubReleases: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Clarify release pull request
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const { data: pulls } = await github.rest.pulls.list({
+              owner,
+              repo,
+              state: "open",
+              head: `${owner}:changeset-release/main`,
+            });
+
+            if (pulls.length === 0) return;
+
+            const pull = pulls[0];
+            const body = pull.body ?? "";
+            const marker = "\n# Releases";
+            const markerIndex = body.indexOf(marker);
+            const releases = markerIndex === -1 ? "" : body.slice(markerIndex);
+            const introduction = [
+              "This PR is maintained by the Changesets release workflow.",
+              "Merging it updates the plugin version and changelog, then creates a Git tag and GitHub Release.",
+              "Nothing is published to npm. Additional changesets merged into `main` will update this PR.",
+            ].join(" ");
+
+            await github.rest.pulls.update({
+              owner,
+              repo,
+              pull_number: pull.number,
+              body: introduction + releases,
+            });
