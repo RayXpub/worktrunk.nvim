@@ -26,6 +26,8 @@ jobs:
           install_args: stylua aqua:Kampfkarren/selene
 
       - name: Run linters
+        env:
+          MISE_AUTO_INSTALL: "false"
         run: mise run lint
 
   test:
@@ -35,10 +37,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install Mise and Worktrunk
+      - name: Install Lua
+        uses: leafo/gh-actions-lua@v13
+        with:
+          luaVersion: "5.1.5"
+
+      - name: Install LuaRocks
+        uses: leafo/gh-actions-luarocks@v6
+
+      - name: Install Worktrunk
         uses: jdx/mise-action@v4
         with:
-          install_args: lua worktrunk
+          install_args: worktrunk
 
       - name: Install Neovim
         uses: rhysd/action-setup-vim@v1
@@ -47,6 +57,8 @@ jobs:
           version: v0.10.4
 
       - name: Run tests with coverage
+        env:
+          MISE_AUTO_INSTALL: "false"
         run: mise run coverage
 
       - name: Upload coverage report
