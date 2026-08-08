@@ -14,6 +14,27 @@ assert_equal(2, vim.fn.exists(":WorktrunkSwitch"), "switch command is registered
 local decoded = assert(cli.decode_json('{"action":"switched","path":"/tmp/repo.feature"}'))
 assert_equal("/tmp/repo.feature", decoded.path, "switch JSON is decoded")
 
+local invalid, decode_error = cli.decode_json("not json")
+assert_equal(nil, invalid, "invalid JSON is rejected")
+assert(decode_error:find("Worktrunk returned invalid JSON", 1, true), "invalid JSON returns a useful error")
+
+local subcommands = vim.fn.getcompletion("Worktrunk ", "cmdline")
+assert(vim.tbl_contains(subcommands, "switch"), "main command completes switch")
+assert(vim.tbl_contains(subcommands, "create"), "main command completes create")
+assert_equal({}, vim.fn.getcompletion("Worktrunk switch feature ", "cmdline"), "nested arguments are not completed")
+
+local valid, setup_error = pcall(config.setup, { cwd_scope = "buffer" })
+assert_equal(false, valid, "invalid cwd scope is rejected")
+assert(setup_error:find("cwd_scope", 1, true), "cwd scope validation returns a useful error")
+
+valid, setup_error = pcall(config.setup, { picker = { status = "verbose" } })
+assert_equal(false, valid, "invalid picker status is rejected")
+assert(setup_error:find("picker.status", 1, true), "picker status validation returns a useful error")
+
+worktrunk.setup({ confirm_create = false })
+assert_equal(false, config.options.confirm_create, "public setup applies configuration")
+worktrunk.setup()
+
 local original_run = cli.run
 local listed
 cli.run = function(_, callback)
