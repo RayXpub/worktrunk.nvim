@@ -1,3 +1,4 @@
 /.rocks/
+/node_modules/
 /luacov.report.out
 /luacov.stats.out

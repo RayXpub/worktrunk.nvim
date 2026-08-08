@@ -1,0 +1,42 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Node.js
+        uses: jdx/mise-action@v4
+        with:
+          install_args: node
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Create release pull request or GitHub release
+        uses: changesets/action@v1
+        with:
+          version: npm run version
+          publish: npm run release
+          title: Release
+          commit: Release
+          createGithubReleases: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

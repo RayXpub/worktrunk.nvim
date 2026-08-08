@@ -147,6 +147,19 @@ mise run coverage
 
 The coverage report is written to `luacov.report.out`.
 
+## Releasing
+
+User-facing changes should include a Changeset:
+
+```sh
+npm run changeset
+```
+
+On `main`, the release workflow creates or updates a release pull request.
+Merging that pull request creates a `vX.Y.Z` tag and GitHub Release. The
+`package.json` is private and is used only for versioning; nothing is published
+to npm.
+
 ## License
 
 [MIT](LICENSE)

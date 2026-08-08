@@ -1,5 +1,6 @@
 [tools]
 lua = "5.1.5"
+node = "24.15.0"
 stylua = "2.1.0"
 "aqua:Kampfkarren/selene" = "0.31.0"
 worktrunk = "0.72.0"
