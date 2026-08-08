@@ -1,0 +1,31 @@
+[tools]
+lua = "5.1.5"
+stylua = "2.1.0"
+"aqua:Kampfkarren/selene" = "0.31.0"
+worktrunk = "0.72.0"
+
+[tasks.lint]
+description = "Check formatting and lint Lua"
+run = [
+  "stylua --check .",
+  "selene lua plugin tests",
+]
+
+[tasks.test]
+description = "Run unit and integration tests"
+run = [
+  "nvim --headless -u tests/minimal_init.lua -l tests/worktrunk_spec.lua",
+  "nvim --headless -u tests/minimal_init.lua -l tests/worktrunk_integration.lua",
+]
+
+[tasks.coverage]
+description = "Run tests and generate a LuaCov report"
+run = '''
+set -eu
+rm -f luacov.stats.out luacov.report.out
+luarocks --tree .rocks install luacov 0.16.0-1
+eval "$(luarocks --tree .rocks path)"
+NVIM_WORKTRUNK_COVERAGE=1 nvim --headless -u tests/minimal_init.lua -l tests/worktrunk_spec.lua
+NVIM_WORKTRUNK_COVERAGE=1 nvim --headless -u tests/minimal_init.lua -l tests/worktrunk_integration.lua
+luacov
+'''

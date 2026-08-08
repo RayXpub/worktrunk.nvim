@@ -1,4 +1,11 @@
+local function stop_coverage()
+  if vim.env.NVIM_WORKTRUNK_COVERAGE == "1" then
+    require("luacov.runner").shutdown()
+  end
+end
+
 if vim.fn.executable("wt") ~= 1 then
+  stop_coverage()
   print("worktrunk.nvim integration test skipped: wt not found")
   return
 end
@@ -42,10 +49,12 @@ if not completed then
   error("timed out waiting for Worktrunk switch")
 end
 
-local branch = vim.trim(vim.system({ "git", "-C", switched.path, "branch", "--show-current" }, { text = true }):wait().stdout)
+local branch =
+  vim.trim(vim.system({ "git", "-C", switched.path, "branch", "--show-current" }, { text = true }):wait().stdout)
 assert(branch == "feature", "expected feature branch, got " .. branch)
 assert(vim.uv.fs_realpath(switched.path) ~= vim.uv.fs_realpath(root), "expected a separate worktree")
 
 vim.fn.delete(switched.path, "rf")
 vim.fn.delete(root, "rf")
+stop_coverage()
 print("worktrunk.nvim integration test passed")

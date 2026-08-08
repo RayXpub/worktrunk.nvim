@@ -83,4 +83,8 @@ cli.switch = original_switch
 vim.api.nvim_set_current_dir(original_cwd)
 vim.fn.delete(target, "rf")
 
+if vim.env.NVIM_WORKTRUNK_COVERAGE == "1" then
+  require("luacov.runner").shutdown()
+end
+
 print("worktrunk.nvim tests passed")

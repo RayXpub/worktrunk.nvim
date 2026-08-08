@@ -62,8 +62,7 @@ function M.list(cwd, callback)
           remote = type(item.remote) == "string" and item.remote or nil,
           current = decoded.items and (worktree and worktree.current or false) or item.is_current,
           symbols = decoded.items and item.display and item.display.symbols or item.symbols,
-          sha = decoded.items and item.head and item.head.short_sha
-            or item.commit and item.commit.short_sha,
+          sha = decoded.items and item.head and item.head.short_sha or item.commit and item.commit.short_sha,
         })
       end
     end

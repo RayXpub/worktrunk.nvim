@@ -1,5 +1,7 @@
 # worktrunk.nvim
 
+[![CI](https://github.com/RayXpub/worktrunk.nvim/actions/workflows/ci.yml/badge.svg)](https://github.com/RayXpub/worktrunk.nvim/actions/workflows/ci.yml)
+
 An unofficial Neovim integration for [Worktrunk](https://worktrunk.dev/).
 Manage worktrees without leaving Neovim.
 The plugin runs `wt` asynchronously and updates Neovim's working directory to
@@ -137,9 +139,13 @@ Neovim's directory, use the native switch commands when changing worktrees.
 ## Testing
 
 ```sh
-nvim --headless -u tests/minimal_init.lua -l tests/worktrunk_spec.lua
-nvim --headless -u tests/minimal_init.lua -l tests/worktrunk_integration.lua
+mise install
+mise run lint
+mise run test
+mise run coverage
 ```
+
+The coverage report is written to `luacov.report.out`.
 
 ## License
 
