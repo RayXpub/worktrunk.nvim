@@ -1,0 +1,81 @@
+*worktrunk.nvim*                  Manage Worktrunk worktrees from Neovim
+
+=============================================================================
+CONTENTS                                                     *worktrunk-contents*
+
+1. Introduction                                      |worktrunk-introduction|
+2. Setup                                                    |worktrunk-setup|
+3. Commands                                              |worktrunk-commands|
+4. Events                                                  |worktrunk-events|
+
+=============================================================================
+INTRODUCTION                                           *worktrunk-introduction*
+
+worktrunk.nvim invokes the Worktrunk `wt` executable and changes Neovim's
+working directory to the selected worktree. Existing buffers are not closed.
+
+Requirements: Neovim 0.10+ and Worktrunk installed in PATH.
+
+=============================================================================
+SETUP                                                           *worktrunk-setup*
+
+>lua
+  require("worktrunk").setup({
+    command = "wt",
+    cwd_scope = "global", -- "global", "tab", or "window"
+    confirm_create = true,
+    picker = {
+      include_branches = false,
+      include_remotes = false,
+    },
+  })
+<
+
+Calling setup is optional when using the defaults.
+
+=============================================================================
+COMMANDS                                                     *worktrunk-commands*
+
+                                                        *:Worktrunk*
+:Worktrunk
+    Select and switch to an existing worktree with |vim.ui.select()|.
+
+:Worktrunk switch [ARGS...]
+    Run `wt switch` with ARGS and update Neovim's working directory. Worktrunk
+    switch flags can be passed directly.
+
+:Worktrunk create [BRANCH] [BASE]
+    Create a branch and worktree, then switch to it. Missing BRANCH is
+    requested with |vim.ui.input()|.
+
+:Worktrunk previous
+    Switch to Worktrunk's previous worktree (`wt switch -`).
+
+:Worktrunk list
+    Open `wt list` in a scratch buffer.
+
+:Worktrunk [OTHER...]
+    Run any other Worktrunk command in an interactive terminal. A child
+    terminal cannot update Neovim's working directory.
+
+                                                  *:WorktrunkSwitch*
+:WorktrunkSwitch [BRANCH]
+    Convenience command for selecting or switching.
+
+                                                  *:WorktrunkCreate*
+:WorktrunkCreate [BRANCH] [BASE]
+    Convenience command for creating a worktree.
+
+                                                    *:WorktrunkList*
+:WorktrunkList
+    Convenience command for listing worktrees.
+
+=============================================================================
+EVENTS                                                         *worktrunk-events*
+
+                                                  *WorktrunkSwitch*
+User WorktrunkSwitch
+    Emitted after Neovim changes directory. The event data is Worktrunk's JSON
+    result and includes `path`, `branch`, and `action`.
+
+vim:tw=78:ts=8:noet:ft=help:norl:
