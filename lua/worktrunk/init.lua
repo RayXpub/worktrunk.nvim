@@ -29,6 +29,21 @@ local function finish_switch(result)
   notify(("Switched to %s"):format(result.branch or result.path))
 end
 
+local function format_status(symbols)
+  if not symbols or symbols == "" or config.options.picker.status == "none" then
+    return ""
+  end
+  if config.options.picker.status == "symbols" then
+    return (" [%s]"):format(symbols)
+  end
+
+  local icons = {}
+  for _, symbol in ipairs(vim.fn.split(symbols, "\\zs")) do
+    table.insert(icons, config.options.picker.icons[symbol] or symbol)
+  end
+  return " [" .. table.concat(icons, " ") .. "]"
+end
+
 function M.setup(options)
   config.setup(options)
 end
@@ -59,7 +74,7 @@ function M.select()
       format_item = function(item)
         local marker = item.current and "@" or " "
         local name = item.branch or item.sha or "detached"
-        local status = item.symbols and item.symbols ~= "" and (" [%s]"):format(item.symbols) or ""
+        local status = format_status(item.symbols)
         local location = item.path or (item.remote and (item.remote .. " branch") or "branch only")
         return ("%s %s%s  %s"):format(marker, name, status, location)
       end,

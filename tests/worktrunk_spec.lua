@@ -41,6 +41,24 @@ assert_equal(true, listed[1].current, "schema 2 current state is normalized")
 assert_equal(nil, listed[2].path, "branch-only item has no worktree path")
 cli.run = original_run
 
+local original_list = cli.list
+local original_select = vim.ui.select
+local picker_label
+cli.list = function(_, callback)
+  callback({ { branch = "main", path = "/tmp/repo", current = true, symbols = "^|" } })
+end
+vim.ui.select = function(items, options, callback)
+  picker_label = options.format_item(items[1])
+  callback(nil)
+end
+config.setup()
+worktrunk.select()
+assert(picker_label:find("🏠", 1, true), "picker translates main symbol to an icon")
+assert(picker_label:find("✅", 1, true), "picker translates upstream status to an icon")
+assert(not picker_label:find("^", 1, true), "picker hides raw symbols in icon mode")
+cli.list = original_list
+vim.ui.select = original_select
+
 local original_switch = cli.switch
 local original_cwd = vim.fn.getcwd()
 local target = vim.fn.tempname()

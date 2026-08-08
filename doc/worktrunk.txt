@@ -5,8 +5,9 @@ CONTENTS                                                     *worktrunk-contents
 
 1. Introduction                                      |worktrunk-introduction|
 2. Setup                                                    |worktrunk-setup|
-3. Commands                                              |worktrunk-commands|
-4. Events                                                  |worktrunk-events|
+3. Picker Status                                    |worktrunk-picker-status|
+4. Commands                                              |worktrunk-commands|
+5. Events                                                  |worktrunk-events|
 
 =============================================================================
 INTRODUCTION                                           *worktrunk-introduction*
@@ -27,11 +28,52 @@ SETUP                                                           *worktrunk-setup
     picker = {
       include_branches = false,
       include_remotes = false,
+      status = "icons", -- "icons", "symbols", or "none"
+      icons = {
+        ["^"] = "🏠",
+        ["|"] = "✅",
+        ["!"] = "📝",
+        ["?"] = "✨",
+        ["+"] = "📦",
+        ["_"] = "🧹",
+      },
     },
   })
 <
 
 Calling setup is optional when using the defaults.
+
+=============================================================================
+PICKER STATUS                                       *worktrunk-picker-status*
+
+The picker translates Worktrunk's compact status symbols into icons:
+
+Icon  Symbol  Meaning ~
+🏠    ^       Main worktree
+✅    |       Synchronized with upstream
+📝    !       Modified files
+✨    ?       Untracked files
+📦    +       Staged files
+⬆️     ↑       Ahead of the default branch
+⬆️     ⇡       Ahead of upstream; commits need pushing
+⬇️     ↓       Behind the default branch
+⬇️     ⇣       Behind upstream
+🔄    ↕       Diverged from the default branch
+🔄    ⇅       Diverged from upstream
+❌    ✘       Merge conflicts
+❌    ✗       Would conflict with the default branch
+🧹    _       Empty, clean, and safe to remove
+✅    ⊂       Integrated and safe to remove
+🟰    –       At the default branch commit with uncommitted changes
+🚫    ∅       No common ancestor with the default branch
+🔄    ↻       Git operation in progress
+🗑️     ⊟       Prunable worktree with a missing directory
+🔒    ⊞       Locked worktree
+⚠️     ⚑       Worktree path mismatch or duplicate branch
+🌿    /       Branch without a worktree
+
+Set `picker.status` to "symbols" to show the raw Worktrunk symbols or "none"
+to hide status. Entries in `picker.icons` override individual defaults.
 
 =============================================================================
 COMMANDS                                                     *worktrunk-commands*

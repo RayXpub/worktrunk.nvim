@@ -77,9 +77,53 @@ require("worktrunk").setup({
   picker = {
     include_branches = false,
     include_remotes = false,
+    status = "icons", -- "icons", "symbols", or "none"
+    icons = {
+      ["^"] = "🏠", -- main worktree
+      ["|"] = "✅", -- synchronized with upstream
+      ["!"] = "📝", -- modified files
+      ["?"] = "✨", -- untracked files
+      ["+"] = "📦", -- staged files
+      ["↑"] = "⬆️", -- ahead of main
+      ["↓"] = "⬇️", -- behind main
+      ["⇡"] = "⬆️", -- ahead of upstream
+      ["⇣"] = "⬇️", -- behind upstream
+      ["✘"] = "❌", -- conflicts
+      ["_"] = "🧹", -- empty and safe to remove
+    },
   },
 })
 ```
+
+The complete default icon mapping is in `lua/worktrunk/config.lua`. Override
+only the entries you want to change; setup merges them with the defaults.
+
+### Picker status icons
+
+| Icon | Worktrunk symbol | Meaning |
+| --- | --- | --- |
+| 🏠 | `^` | Main worktree |
+| ✅ | `\|` | Synchronized with upstream |
+| 📝 | `!` | Modified files |
+| ✨ | `?` | Untracked files |
+| 📦 | `+` | Staged files |
+| ⬆️ | `↑` | Ahead of the default branch |
+| ⬆️ | `⇡` | Ahead of upstream; commits need pushing |
+| ⬇️ | `↓` | Behind the default branch |
+| ⬇️ | `⇣` | Behind upstream |
+| 🔄 | `↕` | Diverged from the default branch |
+| 🔄 | `⇅` | Diverged from upstream |
+| ❌ | `✘` | Merge conflicts |
+| ❌ | `✗` | Would conflict with the default branch |
+| 🧹 | `_` | Empty, clean, and safe to remove |
+| ✅ | `⊂` | Integrated and safe to remove |
+| 🟰 | `–` | At the default branch commit with uncommitted changes |
+| 🚫 | `∅` | No common ancestor with the default branch |
+| 🔄 | `↻` | Git operation in progress |
+| 🗑️ | `⊟` | Prunable worktree with a missing directory |
+| 🔒 | `⊞` | Locked worktree |
+| ⚠️ | `⚑` | Worktree path mismatch or duplicate branch |
+| 🌿 | `/` | Branch without a worktree |
 
 Setting `include_branches` or `include_remotes` widens the picker. Selecting a
 branch without a worktree asks Worktrunk to create its worktree before the
@@ -95,3 +139,7 @@ Neovim's directory, use the native switch commands when changing worktrees.
 nvim --headless -u tests/minimal_init.lua -l tests/worktrunk_spec.lua
 nvim --headless -u tests/minimal_init.lua -l tests/worktrunk_integration.lua
 ```
+
+## License
+
+[MIT](LICENSE)
