@@ -12,8 +12,9 @@ CONTENTS                                                     *worktrunk-contents
 =============================================================================
 INTRODUCTION                                           *worktrunk-introduction*
 
-worktrunk.nvim invokes the Worktrunk `wt` executable and changes Neovim's
-working directory to the selected worktree. Existing buffers are not closed.
+worktrunk.nvim is an unofficial integration that invokes the Worktrunk `wt`
+executable and changes Neovim's working directory to the selected worktree.
+Existing buffers are not closed.
 
 Requirements: Neovim 0.10+ and Worktrunk installed in PATH.
 

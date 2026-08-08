@@ -1,6 +1,7 @@
 # worktrunk.nvim
 
-Manage [Worktrunk](https://worktrunk.dev/) worktrees without leaving Neovim.
+An unofficial Neovim integration for [Worktrunk](https://worktrunk.dev/).
+Manage worktrees without leaving Neovim.
 The plugin runs `wt` asynchronously and updates Neovim's working directory to
 the path returned by Worktrunk after a switch.
 
@@ -15,7 +16,7 @@ With `lazy.nvim`:
 
 ```lua
 {
-  "your-name/worktrunk.nvim",
+  "RayXpub/worktrunk.nvim",
   opts = {},
   keys = {
     { "<leader>ww", "<cmd>Worktrunk<cr>", desc = "Worktrees" },
